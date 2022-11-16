@@ -7,10 +7,19 @@ import server from '../../../server';
 import { ObjectEntityType } from '../../types/Object';
 
 const objectEntityServices = {
-  async get(): Promise<ObjectEntity[]> {
+  async get(_title: string): Promise<ObjectEntity[]> {
     const connection: DataSource = server.dbConnection;
 
     const objectEntityRepo = connection.getRepository(ObjectEntity);
+
+    if (_title != null) {
+      const objects: ObjectEntity[] = await objectEntityRepo
+        .createQueryBuilder('object')
+        .where('object.title like :title', { title: `%${_title}%` })
+        .getMany();
+
+      return objects;
+    }
     const objects: ObjectEntity[] = await objectEntityRepo
       .createQueryBuilder('object')
       .getMany();

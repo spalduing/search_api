@@ -5,10 +5,13 @@ import ObjectEntity from '../db/entities/ObjectEntity';
 import objectEntityServices from '../db/services/objectEntityService';
 
 const objectEntityController = {
-  async get(_req: FastifyRequest, reply: FastifyReply) {
+  async get(_req: any, reply: FastifyReply) {
     try {
       const { get } = objectEntityServices;
-      const response: ObjectEntity[] = await get();
+      const title: string = _req.query.title;
+
+      const response: ObjectEntity[] = await get(title);
+
       reply.send(response);
     } catch (error) {
       reply.code(500).send('Internal Server Error. Please Try Again Later');

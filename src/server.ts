@@ -3,15 +3,19 @@ import fastify, { FastifyInstance } from 'fastify';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import { config } from 'dotenv';
 
+
 import dbConnection from './api/db/index';
 import objectRoute from './api/routes/objectEntityRoute';
 
 config();
 
+const qs = require('qs')
+
 // STARTING A SERVER WITH FASTIFY
 const server: FastifyInstance<Server, IncomingMessage, ServerResponse> =
   fastify({
     logger: true,
+    querystringParser: str => qs.parse(str),
   });
 
 // // This plugin only works locally because it's a dev dependency
